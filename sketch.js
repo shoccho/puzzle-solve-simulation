@@ -75,6 +75,7 @@ function keyPressed() {
 function updateDisplay() {
   genValue(blocks);
   displayblocks(blocks);
+  document.getElementById("wadup").innerHTML = "value= " + genValue(blocks);
 }
 function genValue(blocks) {
   var value = 0;
