@@ -40,7 +40,7 @@ function draw() {
   //   noLoop();
   //   document.getElementById("wadup").innerHTML = "value= " + genValue(blocks);
   if (genValue(blocks) == 0) {
-    alert("congrats! you have no life!");
+    alert("congrats! you have won!");
   }
 }
 function mouseClicked() {
@@ -75,7 +75,8 @@ function keyPressed() {
 function updateDisplay() {
   genValue(blocks);
   displayblocks(blocks);
-  document.getElementById("wadup").innerHTML = "value= " + genValue(blocks);
+  document.getElementById("wadup").innerHTML =
+    "Pieces out of place= " + genValue(blocks);
 }
 function genValue(blocks) {
   var value = 0;
