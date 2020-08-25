@@ -44,7 +44,21 @@ function draw() {
   }
 }
 function mouseClicked() {
-  console.log(genValue(blocks));
+  var my = floor(mouseY / scl);
+  var mx = floor(mouseX / scl);
+  //   console.log(mx, my);
+  if (abs(mx - emp.x) + abs(my - emp.y) == 1) {
+    if (emp.x + 1 == mx) {
+      emp = swapRight(blocks, emp);
+    } else if (emp.x - 1 == mx) {
+      emp = swapLeft(blocks, emp);
+    } else if (emp.y - 1 == my) {
+      emp = swapUp(blocks, emp);
+    } else if (emp.y + 1 == my) {
+      emp = swapDown(blocks, emp);
+    }
+  }
+  updateDisplay();
 }
 function keyPressed() {
   if (keyCode === UP_ARROW) {
@@ -56,7 +70,9 @@ function keyPressed() {
   } else if (keyCode === RIGHT_ARROW) {
     emp = swapRight(blocks, emp);
   }
-
+  updateDisplay();
+}
+function updateDisplay() {
   genValue(blocks);
   displayblocks(blocks);
 }
