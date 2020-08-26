@@ -1,19 +1,19 @@
+//global stuffs
 var blocks = [];
 var scl = 100;
 var emp;
 var moves = 0;
-function setup() {
-  createCanvas(300, 300);
-  //   for (var i = 0; i < 9; i++) {
-  //     blocks.push(new Tile(i % 3, floor(i / 3), i));
-  //   }
-
-  // displayblocks(blocks);
-  // genValue(blocks);
-}
 document.getElementById("loadExam").onclick = genExamBoard;
 document.getElementById("loadNormal").onclick = genBoard;
 document.getElementById("randomize").onclick = randomize;
+
+// necessary functions
+function setup() {
+  createCanvas(300, 300);
+}
+function draw() {}
+
+// randomizing the grid
 function randomize() {
   for (i = 0; i < 200; i++) {
     let p = Math.floor(Math.random() * 4);
@@ -27,11 +27,12 @@ function randomize() {
     } else if (p == 3 && emp.y < 2) {
       emp = swapDown(blocks, emp);
     }
-    //
   }
   moves = 0;
   displayblocks(blocks);
 }
+
+// generating a solved grid
 function genBoard() {
   moves = 0;
   blocks = [];
@@ -48,6 +49,8 @@ function genBoard() {
   }
   displayblocks(blocks);
 }
+
+// generating the puzzle that was given in our exam
 function genExamBoard() {
   moves = 0;
   blocks = [];
@@ -70,6 +73,8 @@ function genExamBoard() {
   blocks.push(blocks3);
   displayblocks(blocks);
 }
+
+// displaying the puzzle
 function displayblocks(p) {
   background("#145374");
   for (var i = 0; i < 3; i++) {
@@ -83,16 +88,11 @@ function displayblocks(p) {
   document.getElementById("moves").innerHTML =
     "Total number of moves = " + moves;
 }
-function draw() {
-  //   background("#145374");
-  //   displayblocks(blocks);
-  //   noLoop();
-  //   document.getElementById("wadup").innerHTML = "value= " + genValue(blocks);
-}
+
+// handle mouse clicks or touches
 function mouseClicked() {
   var my = floor(mouseY / scl);
   var mx = floor(mouseX / scl);
-  //   console.log(mx, my);
   if (abs(mx - emp.x) + abs(my - emp.y) == 1) {
     if (emp.x + 1 == mx) {
       emp = swapRight(blocks, emp);
@@ -106,6 +106,8 @@ function mouseClicked() {
   }
   updateDisplay();
 }
+
+// handle keyboard inputs
 function keyPressed() {
   if (keyCode === UP_ARROW) {
     emp = swapUp(blocks, emp);
@@ -118,12 +120,16 @@ function keyPressed() {
   }
   updateDisplay();
 }
+
+// updating score and puzzle and text
 function updateDisplay() {
   genValue(blocks);
   displayblocks(blocks);
   document.getElementById("wadup").innerHTML =
     "Pieces out of place = " + genValue(blocks);
 }
+
+// generating pieces out of place or heurisitc
 function genValue(blocks) {
   var value = 0;
   for (var i = 0; i < 3; i++) {
@@ -134,6 +140,9 @@ function genValue(blocks) {
   }
   return value;
 }
+
+// movement of empty tile
+
 function swapUp(bocks, emp) {
   temp = bocks[emp.y - 1][emp.x].v;
   bocks[emp.y - 1][emp.x].v = emp.v;
@@ -142,7 +151,6 @@ function swapUp(bocks, emp) {
   moves += 1;
   return emp;
 }
-
 function swapDown(bocks, emp) {
   temp = bocks[emp.y + 1][emp.x].v;
   bocks[emp.y + 1][emp.x].v = emp.v;
@@ -151,7 +159,6 @@ function swapDown(bocks, emp) {
   moves += 1;
   return emp;
 }
-
 function swapLeft(bocks, emp) {
   temp = bocks[emp.y][emp.x - 1].v;
   bocks[emp.y][emp.x - 1].v = emp.v;
@@ -160,7 +167,6 @@ function swapLeft(bocks, emp) {
   moves += 1;
   return emp;
 }
-
 function swapRight(bocks, emp) {
   temp = bocks[emp.y][emp.x + 1].v;
   bocks[emp.y][emp.x + 1].v = emp.v;
@@ -170,6 +176,7 @@ function swapRight(bocks, emp) {
   return emp;
 }
 
+// tile object
 class Tile {
   constructor(x, y, v) {
     this.x = x;
@@ -183,6 +190,7 @@ class Tile {
     textSize(50);
     textAlign(LEFT);
     if (this.v != 8)
+      // selected the 9th tile as the empty tile for convienece
       text(this.v + 1, this.x * scl + scl / 3, this.y * scl + scl / 3, scl);
   }
 }
