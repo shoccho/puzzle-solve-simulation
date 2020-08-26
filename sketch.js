@@ -1,11 +1,56 @@
 var blocks = [];
 var scl = 100;
 var emp;
+var moves = 0;
 function setup() {
   createCanvas(300, 300);
   //   for (var i = 0; i < 9; i++) {
   //     blocks.push(new Tile(i % 3, floor(i / 3), i));
   //   }
+
+  // displayblocks(blocks);
+  // genValue(blocks);
+}
+document.getElementById("loadExam").onclick = genExamBoard;
+document.getElementById("loadNormal").onclick = genBoard;
+document.getElementById("randomize").onclick = randomize;
+function randomize() {
+  for (i = 0; i < 200; i++) {
+    let p = Math.floor(Math.random() * 4);
+    console.log(p);
+    if (p == 0 && emp.x < 2) {
+      emp = swapRight(blocks, emp);
+    } else if (p == 1 && emp.x > 0) {
+      emp = swapLeft(blocks, emp);
+    } else if (p == 2 && emp.y > 0) {
+      emp = swapUp(blocks, emp);
+    } else if (p == 3 && emp.y < 2) {
+      emp = swapDown(blocks, emp);
+    }
+    //
+  }
+  moves = 0;
+  displayblocks(blocks);
+}
+function genBoard() {
+  moves = 0;
+  blocks = [];
+  emp = null;
+  for (var i = 0; i < 3; i++) {
+    var blocks1 = [];
+    for (var j = 0; j < 3; j++) {
+      if (i == 2 && j == 2) {
+        emp = new Tile(2, 2, 8);
+        blocks1.push(emp);
+      } else blocks1.push(new Tile(j, i, i * 3 + j));
+    }
+    blocks.push(blocks1);
+  }
+  displayblocks(blocks);
+}
+function genExamBoard() {
+  moves = 0;
+  blocks = [];
   emp = new Tile(0, 2, 8);
   var blocks1 = [];
   var blocks2 = [];
@@ -24,7 +69,6 @@ function setup() {
   blocks.push(blocks2);
   blocks.push(blocks3);
   displayblocks(blocks);
-  genValue(blocks);
 }
 function displayblocks(p) {
   background("#145374");
@@ -33,15 +77,17 @@ function displayblocks(p) {
       p[i][j].show();
     }
   }
+  if (genValue(blocks) == 0 && moves != 0) {
+    document.getElementById("solved").innerHTML = "You've solved the puzzle !";
+  }
+  document.getElementById("moves").innerHTML =
+    "Total number of moves = " + moves;
 }
 function draw() {
   //   background("#145374");
   //   displayblocks(blocks);
   //   noLoop();
   //   document.getElementById("wadup").innerHTML = "value= " + genValue(blocks);
-  if (genValue(blocks) == 0) {
-    alert("congrats! you have won!");
-  }
 }
 function mouseClicked() {
   var my = floor(mouseY / scl);
@@ -76,7 +122,7 @@ function updateDisplay() {
   genValue(blocks);
   displayblocks(blocks);
   document.getElementById("wadup").innerHTML =
-    "Pieces out of place= " + genValue(blocks);
+    "Pieces out of place = " + genValue(blocks);
 }
 function genValue(blocks) {
   var value = 0;
@@ -93,6 +139,7 @@ function swapUp(bocks, emp) {
   bocks[emp.y - 1][emp.x].v = emp.v;
   emp.v = temp;
   emp = bocks[emp.y - 1][emp.x];
+  moves += 1;
   return emp;
 }
 
@@ -101,6 +148,7 @@ function swapDown(bocks, emp) {
   bocks[emp.y + 1][emp.x].v = emp.v;
   emp.v = temp;
   emp = bocks[emp.y + 1][emp.x];
+  moves += 1;
   return emp;
 }
 
@@ -109,6 +157,7 @@ function swapLeft(bocks, emp) {
   bocks[emp.y][emp.x - 1].v = emp.v;
   emp.v = temp;
   emp = bocks[emp.y][emp.x - 1];
+  moves += 1;
   return emp;
 }
 
@@ -117,6 +166,7 @@ function swapRight(bocks, emp) {
   bocks[emp.y][emp.x + 1].v = emp.v;
   emp.v = temp;
   emp = bocks[emp.y][emp.x + 1];
+  moves += 1;
   return emp;
 }
 
